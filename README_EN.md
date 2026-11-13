@@ -6,6 +6,7 @@
 ![skill](https://img.shields.io/badge/skill-military--aesthetic-2B1F17?style=flat-square)
 ![version](https://img.shields.io/badge/version-1.0.1-D22B1E?style=flat-square)
 ![style](https://img.shields.io/badge/style-Soviet%20constructivism-EFE5D2?style=flat-square)
+![license](https://img.shields.io/badge/license-MIT-2B1F17?style=flat-square)
 
 ---
 
@@ -39,6 +40,7 @@
 - [Directory layout](#directory-layout)
 - [Install & usage](#install--usage)
 - [Limits](#limits)
+- [License](#license)
 
 ---
 
@@ -284,6 +286,18 @@ python scripts/contact_sheet.py <image-dir> -o out.png --cols 3 --labels
 - Text is never reproduced — only flattened into solid color blocks
 - Batch runs require verbatim reuse of the style block, otherwise the style drifts
 - Sample posters are model output, not photographic work
+
+---
+
+## License
+
+Released under the **MIT License**. You are free to use, modify, merge, and distribute this work, including for commercial purposes. The only condition is that the original copyright notice and this permission notice are retained.
+
+See [`LICENSE`](LICENSE) in the repository root for the full text.
+
+```
+Copyright (c) 2026 yingjun-zheng
+```
 
 ---
 

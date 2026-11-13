@@ -6,6 +6,7 @@
 ![skill](https://img.shields.io/badge/skill-military--aesthetic-2B1F17?style=flat-square)
 ![version](https://img.shields.io/badge/version-1.0.1-D22B1E?style=flat-square)
 ![style](https://img.shields.io/badge/style-Soviet%20constructivism-EFE5D2?style=flat-square)
+![license](https://img.shields.io/badge/license-MIT-2B1F17?style=flat-square)
 
 ---
 
@@ -39,6 +40,7 @@
 - [目录结构](#目录结构)
 - [安装与使用](#安装与使用)
 - [能力边界](#能力边界)
+- [开源许可](#开源许可)
 
 ---
 
@@ -284,6 +286,18 @@ python scripts/contact_sheet.py <图片目录> -o out.png --cols 3 --labels
 - 不复刻文字内容，只做纯色块处理
 - 批量出图需严格复用风格段，否则风格漂移
 - 示例图由生成模型产出，非摄影作品
+
+---
+
+## 开源许可
+
+本项目基于 **MIT License** 发布，可自由使用、修改、合并、分发，包含商业用途。唯一条件是保留原始版权声明与许可声明。
+
+完整条款见仓库根目录的 [`LICENSE`](LICENSE)。
+
+```
+Copyright (c) 2026 yingjun-zheng
+```
 
 ---
 
