@@ -60,9 +60,9 @@
 | 它不是 | 它是 |
 |--------|------|
 | 套滤镜 / 调色 | 重构构图，背景整体替换为几何构成 |
-| 复刻照片上的文字编号 | 编号一律处理成纯色块 |
+| 乱编文字编号 | 原照真实编号/机徽直接复刻，编造的文字一律禁止 |
 | 自由发挥的二创 | 主体内容严格守住原片 |
-| 通用文生图 | 锁定五色、锁定几何语言、锁定反旭日禁令 |
+| 通用文生图 | 背景锁定海报色与几何语言、锁定旭日旗禁令；**装备保留原涂装配色** |
 
 ---
 
@@ -107,24 +107,23 @@
 
 ## 三条红线
 
-### 1. 禁止旭日旗语言（一票否决）
+### 1. 禁止旭日旗构图（一票否决，2026-11-21 修订口径）
 
-**任何从单一点向外扩散的放射状线条都判负。**
+**红/白日轮 + 放射光芒**的构图判负。
 
 红白放射 = 日本旭日旗，二战轴心国军旗符号。军事题材里出现这个构图，轻则被举报，重则被当右翼符号处理——配色多"苏联"都救不了。
 
-| 禁用 | 改用 |
+| 禁用 | 允许 |
 |:-----|:-----|
-| sunburst / radiating rays | 平行斜线束（同向平行） |
-| sun / 日轮 | 无，背景不放太阳 |
-| 从主体背后炸开的扇形光芒 | 大块斜切色带（diagonal slab / wedge） |
-| 圆形放射徽章 | 阶梯几何、矩形色块、楔形 |
+| 红色或白色日轮 + 从日轮放射的光芒 | 黑/金/蓝/米白的放射楔形、斜切光线（无中心日轮） |
+| 红白大面积放射分割（旗子联想） | 红楔形斜切分割（构成主义正统） |
+| 圆形放射徽章 | 实心黑圆太阳（纯色、无放射线） |
 
-**自检口径**：画面里最显眼的扩散形结构不能是扇形或放射状。
+**自检口径**：触线的是"日轮+放射"组合与红白旗配色，不是放射本身。
 
-### 2. 不生成任何文字
+### 2. 不生成原照没有的文字
 
-标语、编号、字母、衣物番号——一律处理成纯色块。模型复刻文字只会产出乱码字符。
+标语、假汉字、乱码字母——一律禁止。**原照上真实存在的编号、机徽、涂装标识必须保留**，写进 prompt 让模型按原位逐位复刻（2026-11-21 起默认直接复刻，复杂中文标识才走 Pillow 补画兜底）。
 
 ### 3. 不添加装饰性元素
 
@@ -139,11 +138,11 @@
 | 1 | **判模式**：有照片 → 照片转海报（传 `image1`）；无照片 → 从零生成 |
 | 2 | **加载工具**：`ToolSearch(tool_names: ["ImageGen"])`，再用 `DeferExecuteTool` 调用 |
 | 3 | **报积分**：生成前告知 5–10 积分/张与本次张数 |
-| 4 | **写主体描述**：数量、位置、朝向、手势、关键结构，逐项写清 |
-| 5 | **选背景方案**：BG-1 ~ BG-4 选一个，替换原照片天空/背景 |
-| 6 | **挂三段禁令**：文字禁令 + 反旭日禁令 + 背景分层句 |
+| 4 | **写主体描述**：数量、位置、朝向、手势、关键结构、**原涂装/编号/机徽逐项保留**，逐项写清 |
+| 5 | **选背景方案**：BG-1 ~ BG-5 选一个（**默认 BG-5 几何切面·场景色**），替换原照片天空/背景 |
+| 6 | **挂禁令**：修订版文字禁令（真标识保留）+ 旭日旗专项禁令 + 背景分层句 |
 | 7 | **调用**：`quality: high`，横图 `1536x1024` |
-| 8 | **质检**：主体完整性 → 旭日旗检查 → 背景语言 → 风格 → 配色 → 质感 → 文字 → 水印 |
+| 8 | **质检**：主体完整性 → 识别度与标识保真 → 旭日旗检查 → 背景语言 → 风格 → 配色 → 质感 → 文字 → 水印 |
 | 9 | **交付**：`present_files` 只交图片本身 |
 
 ### 调用参数
@@ -198,20 +197,22 @@ Vintage offset print texture: visible halftone dot pattern, heavy paper grain,
 slight color misregistration, weathered speckles and scuffs.
 ```
 
-### 禁令段（必带）
+### 禁令段（必带，2026-11-21 修订版）
 
 ```text
-Pure poster artwork, absolutely no text, no lettering, no numbers, no characters, no symbols,
-no writing of any kind on any surface, no watermark, no signature, no border frame,
-no patches, no badges, no uniform markings, no chest lettering, no insignia.
+No invented text: no lettering, no numbers, no characters, no symbols other than
+the markings that exist in the original photo; those must be reproduced exactly
+in position and content. No watermark, no signature, no border frame, no stamp,
+no seal, no corner ornament, no maker mark, no invented badges.
 ```
 
-### 反旭日禁令段（必带）
+### 旭日旗专项禁令段（必带，2026-11-21 修订版）
 
 ```text
-No sunburst, no radiating rays, no rays from a single point, no fan of light, no sun,
-no circular emblem, no badge, no rising-sun motif, no radial composition.
-The background contains no radiating or fan-shaped light pattern of any kind.
+No rising-sun motif: never a red or white sun disc with rays radiating from it,
+no red-on-white radiating bands. Radiating wedge shapes, diagonal light planes
+and beam fans are allowed only in non-flag colors (black, gold, blue, cream)
+and only without any central disc.
 ```
 
 ### 背景分层句（必带）
@@ -228,8 +229,10 @@ and lower right areas, leaving open cream paper around the subject.
 
 | 症状 | 根因 | 修法 |
 |:-----|:-----|:-----|
-| 背景变成扇形放射 / 日轮 | prompt 里有 sunburst 类措辞 | 删放射词 + 加反旭日禁令 + **换成背景方案**（只加禁令压不住） |
-| 机身长出乱码汉字 | 原片有水印/编号，被一并重绘 | 主体描述点名"无字纯色块" + 禁令加 no characters |
+| 背景变成红白日轮放射（旭日旗） | prompt 里有 sunburst 类措辞或红白配色 | 删日轮与红白放射 + 加旭日旗专项禁令 + **换成背景方案**（只加禁令压不住） |
+| 机身长出乱码汉字 | 原片水印被重绘成假字 | 主体描述点名真实编号按原位复刻 + 禁令 no invented text |
+| 编号/机徽丢失或变形 | 禁令段误用了旧版"no numbers, no insignia" | 换修订版禁令段 + 主体描述逐位写明编号与机徽位置 |
+| 装备被涂成海报色、认不出机型 | 用了旧"高调三色"风格段 | 换装备识别版风格段（2026-11-21 默认）+ 写明原涂装颜色 |
 | 背心/衣服上出现假字 | 原片衣物有番号 | 描述里写 `plain solid vests with no patches, no writing` |
 | 背景色块压在机翼上 | "平行斜线束"被画成实心块 | 加背景分层句 + 强调 `thin lines, not solid slabs` |
 | 主体被改得认不出 | `input_fidelity` 太低 | 必须是 `high` + 主体描述写细 |

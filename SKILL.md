@@ -1,6 +1,6 @@
 ---
 name: military-aesthetic
-description: Convert real-world photographs into Soviet constructivist military propaganda posters (the "military constructivist" look - warm cream paper, vermilion red, deep black, ochre gold, hard-edged flat color blocks, bold black ink outlines, diagonal wedges, stepped terraces, industrial skyline silhouettes, parallel hatch lines, halftone offset-print texture), and render new images in that style from scratch. Backgrounds must never use radiating sunburst rays or any fan-shaped light motif, which reads as a Japanese rising-sun flag. This skill should be used when the user supplies a photo and asks to turn it into a poster, mentions 军构美学 / 构成主义海报 / 军事宣传画 / 苏联海报风格 / 复古军事版画 / constructivist military poster / soviet propaganda poster, or wants a batch of images rendered in this style.
+description: 照片转「苏联构成主义 × 军事宣传画」海报，或从零生成该风格军事插画。装备识别度优先：严格保留装备原涂装/迷彩、编号、机徽与结构细节（模型直接复刻），仅重构背景为红/黑/赭金/米白构成主义几何切面（可选一个场景色）。触发词：军构美学、构成主义、军事宣传画、苏联海报、照片转海报。
 agent_created: true
 ---
 
@@ -44,45 +44,49 @@ ImageGen 是延迟工具，schema 未加载前直接调用会报 InputValidation
 
 prompt = `references/prompt-templates.md` 中对应模板 + 主体描述。
 
-模式 A 的主体描述必须逐项覆盖：
+**装备识别度优先（2026-11-21 用户校准，最高优先级）**：装备主体必须一眼可辨机型/舰型/车型。模式 A 的主体描述必须逐项覆盖：
 
 - 主体是什么、数量、彼此位置关系
 - 每个主体的姿态（尤其手势、朝向）
-- 场景元素（甲板/地面/前景物体）
-- 需要简化的表面（编号、标志 → 纯色块）
+- **原涂装/迷彩颜色照搬**——数码迷彩就写数码迷彩、海灰就写海灰、沙漠迷彩就写沙黄，不许替换成海报色
+- **编号/舷号逐位复刻**（如 106、3506、FK322）、红星机徽与识别涂装按原位保留——模型直接画，实测短编号渲染可靠
+- 武器构型与结构细节（挂载、起落架、履带、雷达）完整保留
+- 明确写 "highly recognizable, NOT abstract"
 
-主体描述**不要写"天空/背景长什么样"**——天空统一交给背景方案。
+场景元素（甲板/地面/前景人物）写进主体描述，但**不要写"天空/背景长什么样"**——天空统一交给背景方案。
 
 ### 第 4.5 步：选背景方案（不可跳过）
 
-从 `references/prompt-templates.md` 的背景方案库（BG-1 城市工业剪影 / BG-2 斜切色块与阶梯 / BG-3 平行斜线束与几何山形 / BG-4 透视网格地面）里**选一个**插入 prompt，替换原照片的整个天空或杂乱背景。
+从 `references/prompt-templates.md` 的背景方案库里**选一个**插入 prompt，替换原照片的整个天空或杂乱背景。
 
- Soviet 构成主义的背景语言是斜切、阶梯、剪影、平行线束，**不是放射**。背景方案是这套风格成立的地基，也是避开旭日旗的根本手段——只加禁令不给正面方案，模型仍会往扇形光芒上靠。
+**默认选 BG-5（大块几何切面 · 场景色，2026-11-21 用户七图校准）**——海军题材配海蓝场景色，城市夜戏配夜绿场景色，其余题材米白打底。老方案 BG-1～BG-4 作为备选保留。
 
-### 第 4.6 步：带上三段禁令
+ Soviet 构成主义的背景语言是斜切、楔形、色块面。放射状平面在**非旗色**（黑/金/蓝/米白）下可用，但红日轮+放射的旭日旗构图仍然一票否决（见第 4.6 步）。
 
-每次生成必须逐字带上（文本见 `references/prompt-templates.md`）：
+### 第 4.6 步：带上禁令段（2026-11-21 修订版）
 
-```
-no text, no lettering, no numbers, no characters, no symbols,
-no writing of any kind on any surface, no watermark, no signature, no border frame,
-no patches, no badges, no uniform markings, no chest lettering, no insignia
-```
+每次生成必须带上 `references/prompt-templates.md` 中的修订版禁令段：
+
+**禁令段（区分"真标识"与"编造字"）：**
 
 ```
-No sunburst, no radiating rays, no rays from a single point, no fan of light,
-no sun, no circular emblem, no badge, no rising-sun motif, no radial composition.
-The background contains no radiating or fan-shaped light pattern of any kind.
+No invented text: no lettering, no numbers, no characters, no symbols other than
+the markings that exist in the original photo; those must be reproduced exactly
+in position and content. No watermark, no signature, no border frame, no stamp,
+no seal, no corner ornament, no maker mark, no invented badges.
 ```
 
+**旭日旗专项禁令段（每次生成必带）：**
+
 ```
-All background geometry stays entirely behind the subject and never overlaps it.
-The background elements are thin lines and hard-edged slabs placed in the upper left
-and lower right areas, leaving open cream paper around the subject.
+No rising-sun motif: never a red or white sun disc with rays radiating from it,
+no red-on-white radiating bands. Radiating wedge shapes, diagonal light planes
+and beam fans are allowed only in non-flag colors (black, gold, blue, cream)
+and only without any central disc.
 ```
 
-漏掉反旭日禁令段，背景就会退化成旭日旗——这是这套风格的一票否决项。
-漏掉第三段，背景色块会压到主体上，被看成装备画错了。
+漏掉旭日旗禁令段，模型可能退化成红白放射旗构图——这是这套风格的一票否决项。
+原照片上的真实编号、机徽**直接让模型复刻**（2026-11-21 起，参考图实测短编号渲染可靠）；复杂中文标识（如垂尾书法字）模型画不好时，才退回"留纯色面 + Pillow 补画"的老路（见 `style-spec.md` 第 6.5 节）。
 
 ### 第 5 步：调用
 
@@ -109,14 +113,15 @@ and lower right areas, leaving open cream paper around the subject.
 
 对每张产出调用 `ViewImage`，逐项核对：
 
-1. **主体完整性** — 主体数量、姿态、手势、结构是否与原照一致
-2. **旭日旗检查（一票否决）** — 画面里有没有扇形放射光芒、日轮、圆形放射徽章、任何从一点扩散的线条结构。有就重出，不看其他优点
-3. **背景语言** — 是否为斜切色块 / 阶梯 / 工业剪影 / 平行线束 / 透视网格这类苏联式几何背景，而不是放射或写实天空
-4. **风格还原** — 是否为平涂硬边色块 + 粗黑轮廓；有无渐变、阴影、写实残留
-5. **配色** — 是否锁在五色内（米白底 / 朱红 / 黑 / 赭金 / 少量钴蓝）
-6. **印刷质感** — 网点、纸纹、套色错位
-7. **文字污染** — 机身/装备上是否长出乱码字符（最常见失败点）
-8. **水印** — 右下角平台 AI 标识属工具层，prompt 无法去除
+1. **主体完整性** — 主体数量、姿态、结构是否与原照一致
+2. **识别度与标识保真（2026-11-21 新增）** — 机型/舰型/车型一眼可辨；原涂装/迷彩颜色未被替换；编号逐位正确；机徽、识别涂装在原位。任何一项丢了就重出
+3. **旭日旗检查（一票否决）** — 画面里有没有"红/白日轮 + 放射光芒"的旭日旗构图。注意：非旗色（黑/金/蓝/米白）的放射楔形、斜切光线**允许**（参考族实测存在），只有红色日轮+放射才算触线
+4. **背景语言** — 是否为大块构成主义几何切面（斜三角/楔形/放射平面，BG-5）或老方案 BG-1～BG-4，而不是写实天空
+5. **风格还原** — 装备为精细扁平矢量插画 + 几何切面明暗；有无渐变、写实照片残留
+6. **配色** — 背景锁在红/黑/赭金/米白 + 至多一个场景色；装备保留原涂装配色（不受背景调色板约束）
+7. **印刷质感** — 做旧纸纹、颗粒、网点
+8. **文字污染** — 机身/装备上是否长出**原照没有的**乱码字符（最常见失败点）；原照真实编号错位/变形也算失败
+9. **水印** — 右下角平台 AI 标识属工具层，prompt 无法去除
 
 任一项不过，按 `references/troubleshooting.md` 调 prompt 重出。
 
@@ -144,7 +149,9 @@ python scripts/contact_sheet.py <图片目录> -o <输出拼图路径> --cols 3 
 
 ## 硬性约束
 
-- **禁止旭日旗语言**：任何从单一点向外扩散的放射状线条、扇形光芒、日轮、圆形放射徽章一律不可用。背景一律走斜切色块 / 阶梯 / 工业剪影 / 平行线束 / 透视网格。这条优先于任何风格追求。
+- **装备识别度优先（2026-11-21，最高优先级）**：原涂装/迷彩颜色、编号、机徽、武器构型一律保留并让模型直接复刻，绝不抽象化、绝不把装备颜色统一成海报色。这条优先于任何配色规则。
+- **禁止旭日旗构图**：红/白日轮 + 放射光芒一律不可用。非旗色的放射楔形、斜切光线允许。这条优先于任何风格追求。
+- **不放太阳（2026-11-21 用户拍板）**：背景一律不加太阳/月亮/圆形天体——黑圆也不行（实测放主体后方会变成"机身后开黑洞"，参考族七图中也没有太阳）。
 - 不要在画面里自行添加装饰性元素（印章、角标、水印式标记、"XX 出品"小戳）。参考图里没有的东西不要加。
-- 不要生成任何文字、标语、编号——原始照片上的编号同样处理成纯色块，不要试图复刻。
+- 不要生成**原照上没有的**文字、标语、编号；原照真实编号/机徽必须保留。
 - 不要因为图生图效果不理想就把"还原照片内容"降级为"重画一个类似场景"；用户要的是他那张照片的构图。

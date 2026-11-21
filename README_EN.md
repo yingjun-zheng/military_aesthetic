@@ -1,5 +1,7 @@
 # Military Aesthetic · military-aesthetic
 
+> ⚠️ **2026-11-21 update**: the prompt rules were recalibrated against a 7-image reference set — equipment recognizability now takes top priority (original paint/camouflage, hull numbers and insignia are reproduced directly by the model, never abstracted), a new default background scheme BG-5 was added, and the sunburst ban was narrowed to the rising-sun motif specifically. See the Chinese `README.md` / `SKILL.md` / `references/` for the current rules; sections below may lag behind.
+
 > Turn a real photograph into a 1930s Soviet constructivist military propaganda poster.
 > The subject stays as it was; the entire background is rebuilt as geometry.
 

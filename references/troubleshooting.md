@@ -4,26 +4,26 @@
 
 ## 0. 背景变成旭日旗（一票否决，最高优先级）
 
-**症状**：主体背后出现扇形放射光芒、红白对分、或一个圆形日轮。
+**症状**：主体背后出现红色日轮 + 放射光芒，或红白大面积放射分割。
 
-**根因**：prompt 里出现了 `sunburst` / `radiating rays` / "光芒从主体背后炸开" 这类措辞，或沿用了旧版风格描述段里的 `hard-edged radiating red and black sunburst rays`。
+**根因**：prompt 里出现了 `sunburst` + 红白配色、`bursting from behind` 这类措辞。
 
 **为什么一票否决**：红白放射 = 日本旭日旗，二战轴心国军旗符号。军事题材里出现这个构图，无论配色多"苏联"都可能被当右翼符号处理，作品直接不可用。
 
 **修法**（按顺序做，缺一步就复发）：
 
-1. 删掉全部放射类词汇：`sunburst`、`radiating rays`、`rays`、`fan of light`、`sun`、`bursting from behind`
-2. 追加反旭日禁令段（`references/prompt-templates.md` 有全文）：
+1. 删掉全部日轮与红白放射词汇：`sunburst`、`red sun`、`rays from the sun`、`bursting from behind`
+2. 追加旭日旗专项禁令段（`references/prompt-templates.md` 有全文）：
 
 ```
-No sunburst, no radiating rays, no rays from a single point, no fan of light, no sun, no circular emblem, no badge, no rising-sun motif, no radial composition. The background contains no radiating or fan-shaped light pattern of any kind.
+No rising-sun motif: never a red or white sun disc with rays radiating from it, no red-on-white radiating bands. Radiating wedge shapes, diagonal light planes and beam fans are allowed only in non-flag colors (black, gold, blue, cream) and only without any central disc.
 ```
 
-3. **换背景，不要只加禁令**——用 `references/prompt-templates.md` 的背景方案（BG-1 城市剪影 / BG-2 斜切阶梯 / BG-3 平行线束 / BG-4 透视网格）替换整个天空或背景。禁令只能压住一部分，正面给出苏联式的背景语言才靠得住。
+3. **换背景，不要只加禁令**——用 `references/prompt-templates.md` 的背景方案（**默认 BG-5 几何切面·场景色**，备选 BG-1 城市剪影 / BG-2 斜切阶梯 / BG-3 平行线束 / BG-4 透视网格）替换整个天空或背景。
 4. 背景里的朱红改成**楔形/斜带**出现，别做"红白大面积对分"，那也是旗子联想。
-5. 背景辅助线改用**同向平行的 hatch lines**，绝不用发散的射线。
+5. 需要放射动势时，用**非旗色**（黑/金/蓝/米白）的放射楔形或光束扇面，且不带中心日轮。
 
-**自检口径**：画面里最显眼的扩散形结构是不是扇形/放射状？是就重出。
+**自检口径**：触线的是"红/白日轮+放射"的组合，不是放射本身。黑色圆盘 + 金色放射光束不算旭日旗；红色日轮带光芒算。
 
 ## 1. 机身/装备上长出乱码字符（最常见）
 
@@ -152,10 +152,10 @@ no emblem, no badge, no stamp, no seal, no corner ornament, no maker mark
 the crew wear plain solid yellow and white vests with no patches, no writing, no lettering, no chest markings
 ```
 
-同时禁令段追加：
+同时禁令段追加（注意是禁"编造"，不是清"真标识"）：
 
 ```
-no patches, no badges, no uniform markings, no chest lettering, no insignia
+no invented patches, no invented badges, no invented lettering on the vests
 ```
 
 ## 11. 背景色块压在主体上，像零件漂浮
